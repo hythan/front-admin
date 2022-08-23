@@ -130,19 +130,4 @@ export default {
   margin-left: auto;
 }
 
-.form-control.valid {
-  border-color: green;
-}
-
-.form-control.valid:focus {
-  box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 25%);
-}
-
-.form-control.invalid {
-  border-color: red;
-}
-
-.form-control.invalid:focus {
-  box-shadow: 0 0 0 0.25rem rgb(255 0 0 / 25%);
-}
 </style>

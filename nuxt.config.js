@@ -17,6 +17,10 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  // router: {
+  //   middleware: ['auth']
+  // },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
@@ -52,7 +56,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
