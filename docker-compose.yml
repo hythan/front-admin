@@ -3,7 +3,7 @@ services:
   app:
     image: node:lts
     user: node:node
-    container_name: admin-nuxt
+    container_name: front-admin-nuxt
     working_dir: /app
     volumes:
       - ./:/app

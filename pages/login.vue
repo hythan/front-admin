@@ -74,7 +74,11 @@ export default {
       },
     }
   },
-  mounted: function () {},
+  created: function () {
+    if(this.$auth.loggedIn){
+      this.$router.push('/')
+    }
+  },
   methods: {
     onSubmit: async function (e) {
       e.preventDefault()

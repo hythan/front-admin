@@ -9,12 +9,23 @@
       :custom-filter="filterOnlyCapsText"
     >
       <template v-slot:top>
-        <h2 class="text-center">Admins</h2>
-        <v-text-field
-          v-model="search"
-          label="Search (UPPER CASE ONLY)"
-          class="mx-4"
-        ></v-text-field>
+        <v-toolbar flat>
+          <v-toolbar-title>Admins</v-toolbar-title
+          ><v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <nuxt-link to="/admins/create" class="btn-create">
+            <v-btn color="primary" class="mb-2"> Create Admin</v-btn>
+          </nuxt-link>
+        </v-toolbar>
+         <v-text-field
+            v-model="search"
+            label="Search (UPPER CASE ONLY)"
+            class="mx-4"
+          ></v-text-field>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <nuxt-link :to="{path: '/admins/edit', query: {id: item.id}}"><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -22,6 +33,7 @@
 
 <script>
 export default {
+  middleware: ['auth'],
   data() {
     return {
       search: '',
@@ -43,6 +55,7 @@ export default {
           value: 'name',
         },
         { text: 'Email', value: 'email' },
+        { text: 'Actions', value: 'actions' },
       ]
     },
   },
@@ -57,15 +70,16 @@ export default {
     },
   },
   mounted() {
+    if (!this.$auth.$storage._state['_token.local']) {
+      return
+    }
+
     this.$axios
-      .get(
-        'admins',
-        {
-          headers: {
-            Authorization: `Bearer Token ${this.$store.state.token.token}`,
-          },
-        }
-      )
+      .get('admins', {
+        headers: {
+          Authorization: `${this.$auth.$storage._state['_token.local']}`,
+        },
+      })
       .then((response) => {
         this.admins = response.data
       })
