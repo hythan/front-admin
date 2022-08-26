@@ -1,6 +1,6 @@
 <template>
   <div>
-    <validation-observer ref="admin_edit">
+    <validation-observer ref="admin_edit_form">
       <form @submit.prevent="submit" class="card card-md">
         <validation-provider
           v-slot="validationContext"
@@ -10,7 +10,7 @@
           class="input-div-provider"
         >
           <v-text-field
-            v-model="name"
+            v-model="form.name"
             label="Name"
             :error-messages="validationContext.errors[0]"
           />
@@ -23,7 +23,7 @@
           class="input-div-provider"
         >
           <v-text-field
-            v-model="email"
+            v-model="form.email"
             label="Email"
             :error-messages="validationContext.errors[0]"
           />
@@ -35,7 +35,7 @@
           class="input-div-provider"
         >
           <v-text-field
-            v-model="password"
+            v-model="form.password"
             type="password"
             label="Password"
             :error-messages="validationContext.errors[0]"
@@ -54,7 +54,9 @@
             :error-messages="validationContext.errors[0]"
           />
         </validation-provider>
-        <v-btn class="btn-form-edit" type="submit"><v-icon>mdi-content-save</v-icon> Salvar</v-btn>
+        <v-btn class="btn-form-edit" type="submit"
+          ><v-icon>mdi-content-save</v-icon> Salvar</v-btn
+        >
       </form>
     </validation-observer>
   </div>
@@ -64,18 +66,33 @@
 export default {
   data() {
     return {
-      name: '',
-      email: '',
-      password: '',
+      form: {
+        name: '',
+        email: '',
+        password: '',
+      },
       passwordConfirmation: '',
     }
   },
   methods: {
-    submit() {},
+    submit() {
+        this.$axios.patch(`admins/${this.$route.query.id}`, this.form).then((response) => {
+          console.log(response.data);
+        })
+    },
   },
   mounted() {
-    console.log(this.$route.query);
-  }
+    this.$axios
+      .get(`admins/${this.$route.query.id}`, {
+        headers: {
+          Authorization: `${this.$auth.$storage._state['_token.local']}`,
+        },
+      })
+      .then((response) => {
+        this.form.name = response.data.name
+        this.form.email = response.data.email
+      })
+  },
 }
 </script>
 
@@ -85,9 +102,8 @@ export default {
 }
 
 .btn-form-edit {
-    max-width: 100px;
-    margin: auto;
-    margin-bottom: 15px;
+  max-width: 100px;
+  margin: auto;
+  margin-bottom: 15px;
 }
-
 </style>
