@@ -46,7 +46,9 @@
           v-slot="validationContext"
           name="Password Confirmation"
           tag="div"
-          :rules="this.form.password ? 'required|email_confirmation:@Password' : ''"
+          :rules="
+            this.form.password ? 'required|email_confirmation:@Password' : ''
+          "
           class="input-div-provider"
         >
           <v-text-field
@@ -78,14 +80,28 @@ export default {
     }
   },
   methods: {
-    submit: async function() {
+    submit: async function () {
       const isValid = await this.$refs.admin_form.validate()
       if (!isValid) {
-        return;
+        return
       }
-      
+
+      if(this.isEdit) {
+        return this.editAdmin();
+      }
+
+      return this.createAdmin();
+    },
+    editAdmin() {
       this.$axios
         .patch(`admins/${this.$route.query.id}`, this.form)
+        .then((response) => {
+          this.$router.push('/admins')
+        })
+    },
+    createAdmin() {
+         this.$axios
+        .post(`admins`, this.form)
         .then((response) => {
           this.$router.push('/admins')
         })

@@ -94,7 +94,6 @@ export default {
             password: this.form.password,
           },
         })
-        this.$store.commit('setToken',response.data);
       } catch (error) {
         console.log(error)
       }
