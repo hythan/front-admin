@@ -30,6 +30,8 @@
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
       <v-toolbar-title v-text="title" />
+      <v-spacer/>
+      <v-toolbar-title v-text="userName"/>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -88,5 +90,14 @@ export default {
       title: 'Maxiambiental Admin',
     }
   },
+  computed: {
+    userName() {
+      if(!this.$auth.loggedIn){
+        return '';
+      }
+
+      return this.$auth.$state.user.emails;
+    }
+  }
 }
 </script>

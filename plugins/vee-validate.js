@@ -14,3 +14,11 @@ extend("email", {
   ...email,
   message: "Insert a valid email.",
 });
+
+extend('email_confirmation', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value === target
+  },
+  message: 'Password confirmation does not match.',
+})

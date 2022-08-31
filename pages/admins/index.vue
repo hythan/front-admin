@@ -19,7 +19,7 @@
         </v-toolbar>
          <v-text-field
             v-model="search"
-            label="Search (UPPER CASE ONLY)"
+            label="Search"
             class="mx-4"
           ></v-text-field>
       </template>
@@ -65,7 +65,7 @@ export default {
         value != null &&
         search != null &&
         typeof value === 'string' &&
-        value.toString().toLocaleUpperCase().indexOf(search) !== -1
+        value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
   },
