@@ -1,3 +1,3 @@
 <template>
-  <StudentForm />
+  <StudentForm :formTitle="'Create Student'" />
 </template>

@@ -24,7 +24,7 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <nuxt-link :to="{ path: '/students/edit', query: { id: item.id } }"
+        <nuxt-link :to="{ path: `/students/${item.id}/edit` }"
           ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
         >
         <v-icon small @click="deleteStudent(item.id)"> mdi-delete </v-icon>

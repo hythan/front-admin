@@ -2,6 +2,8 @@
   <div>
     <validation-observer ref="admin_form">
       <form @submit.prevent="submit" class="card card-md">
+        <h2 class="form-title text-center">{{ formTitle }}</h2>
+
         <validation-provider
           v-slot="validationContext"
           rules="required"
@@ -58,7 +60,7 @@
             :error-messages="validationContext.errors[0]"
           />
         </validation-provider>
-        <v-btn class="btn-form-edit" type="submit"
+        <v-btn class="btn-form-save" type="submit"
           ><v-icon>mdi-content-save</v-icon> Salvar</v-btn
         >
       </form>
@@ -68,7 +70,7 @@
 
 <script >
 export default {
-  props: ['isEdit'],
+  props: ['isEdit', 'formTitle'],
   data() {
     return {
       form: {
@@ -97,11 +99,13 @@ export default {
         .patch(`admins/${this.$route.params.id}`, this.form)
         .then((response) => {
           this.$router.push('/admins')
+          Swal.fire('Admin was updated!', '', 'success')
         })
     },
     createAdmin() {
       this.$axios.post(`admins`, this.form).then((response) => {
         this.$router.push('/admins')
+        Swal.fire('Admin was updated!', '', 'success')
       })
     },
   },
@@ -128,9 +132,14 @@ export default {
   margin: 0 15px 5px 15px;
 }
 
-.btn-form-edit {
+.btn-form-save {
   max-width: 100px;
   margin: auto;
   margin-bottom: 15px;
+}
+
+.form-title {
+  margin-top: 10px;
+  text-shadow: 1px 1px 2px rgb(112, 112, 112);
 }
 </style>

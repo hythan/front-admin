@@ -1,5 +1,5 @@
 <template>
-  <AdminForm />
+  <AdminForm :formTitle="'Create Admin'"/>
 </template>
 
 <script >

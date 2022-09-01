@@ -1,5 +1,5 @@
 <template>
-  <AdminForm :isEdit="true"/>
+  <AdminForm :isEdit="true" :formTitle="'Edit Admin'"/>
 </template>
 
 <script >
