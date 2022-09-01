@@ -17,21 +17,25 @@
             <v-btn color="primary" class="mb-2"> Create Admin</v-btn>
           </nuxt-link>
         </v-toolbar>
-         <v-text-field
-            v-model="search"
-            label="Search"
-            class="mx-4"
-          ></v-text-field>
+        <v-text-field
+          v-model="search"
+          label="Search"
+          class="mx-4"
+        ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <nuxt-link :to="{path: '/admins/edit', query: {id: item.id}}"><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <nuxt-link :to="{ path: '/admins/edit', query: { id: item.id } }"
+          ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
+        >
+        <v-icon small @click="deleteAdmin(item.id)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 export default {
   middleware: ['auth'],
   data() {
@@ -68,13 +72,24 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-  },
-  mounted() {
-    if (!this.$auth.$storage._state['_token.local']) {
-      return
-    }
-
-    this.$axios
+    deleteAdmin(id) {
+      Swal.fire({
+        title: 'Are you sure to delete this admin?',
+        confirmButtonText: 'Remove',
+        showCancelButton: true,
+      }).then((result) => {
+        if (!result.value) {
+          return
+        }
+        this.$axios.delete(`admins/${id}`).then((response) => {
+          Swal.fire('Admin was removed!', '', 'success')
+          this.getOrUpdateAdminsList();
+        })
+      })
+      console.log(id)
+    },
+    getOrUpdateAdminsList() {
+        this.$axios
       .get('admins', {
         headers: {
           Authorization: `${this.$auth.$storage._state['_token.local']}`,
@@ -83,6 +98,14 @@ export default {
       .then((response) => {
         this.admins = response.data
       })
+    },
+  },
+  mounted() {
+    if (!this.$auth.$storage._state['_token.local']) {
+      return
+    }
+
+    this.getOrUpdateAdminsList();
   },
 }
 </script>

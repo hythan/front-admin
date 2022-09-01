@@ -1,69 +1,74 @@
 <template>
   <div>
-      <div class="text-center">
-        <validation-observer ref="login_form">
-          <b-form method="post" @submit="onSubmit" class="login-form card card-md">
-            <div class="card-body">
-              <h2 class="card-title mb-4">Login Admin</h2>
-              <validation-provider
-                name="Email"
-                rules="required|email"
-                v-slot="validationContext"
-                tag="div"
+    <div class="text-center">
+      <validation-observer ref="login_form">
+        <b-form
+          method="post"
+          @submit="onSubmit"
+          class="login-form card card-md"
+        >
+          <div class="card-body">
+            <h2 class="card-title mb-4">Login Admin</h2>
+            <validation-provider
+              name="Email"
+              rules="required|email"
+              v-slot="validationContext"
+              tag="div"
+            >
+              <b-form-group
+                id="email"
+                label="Email:"
+                label-for="input-email"
+                label-align="left"
               >
-                <b-form-group
-                  id="email"
-                  label="Email:"
-                  label-for="input-email"
-                  label-align="left"
-                >
-                  <b-form-input
-                    name="email"
-                    id="input-email"
-                    v-model="form.email"
-                    type="email"
-                    placeholder="example@example.com"
-                    :state="validateInputRules(validationContext)"
-                  />
-                  <span class="vee-errors">{{
-                    validationContext.errors[0]
-                  }}</span>
-                </b-form-group>
-              </validation-provider>
-              <validation-provider
-                name="Password"
-                rules="required"
-                v-slot="validationContext"
+                <b-form-input
+                  name="email"
+                  id="input-email"
+                  v-model="form.email"
+                  type="email"
+                  placeholder="example@example.com"
+                  :state="validateInputRules(validationContext)"
+                />
+                <span class="vee-errors">{{
+                  validationContext.errors[0]
+                }}</span>
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              name="Password"
+              rules="required"
+              v-slot="validationContext"
+            >
+              <b-form-group
+                id="password"
+                label="Password:"
+                label-for="input-password"
+                label-align="left"
               >
-                <b-form-group
-                  id="password"
-                  label="Password:"
-                  label-for="input-password"
-                  label-align="left"
-                >
-                  <b-form-input
-                    id="input-password"
-                    v-model="form.password"
-                    placeholder="**********"
-                    type="password"
-                    :state="validateInputRules(validationContext)"
-                  />
-                  <span class="vee-errors">{{
-                    validationContext.errors[0]
-                  }}</span>
-                </b-form-group>
-              </validation-provider>
-              <b-button class="login-button" type="submit" variant="primary">
-                Login
-              </b-button>
-            </div>
-          </b-form>
-        </validation-observer>
-      </div>
+                <b-form-input
+                  id="input-password"
+                  v-model="form.password"
+                  placeholder="**********"
+                  type="password"
+                  :state="validateInputRules(validationContext)"
+                />
+                <span class="vee-errors">{{
+                  validationContext.errors[0]
+                }}</span>
+              </b-form-group>
+            </validation-provider>
+            <b-button class="login-button" type="submit" variant="primary">
+              Login
+            </b-button>
+          </div>
+        </b-form>
+      </validation-observer>
     </div>
+  </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
   layout: 'login',
   data() {
@@ -75,7 +80,7 @@ export default {
     }
   },
   created: function () {
-    if(this.$auth.loggedIn){
+    if (this.$auth.loggedIn) {
       this.$router.push('/')
     }
   },
@@ -95,6 +100,13 @@ export default {
           },
         })
       } catch (error) {
+        Swal.fire({
+          position: 'center',
+          type: 'error',
+          title: 'Email or password is incorrect.',
+          showConfirmButton: false,
+          timer: 2000,
+        })
         console.log(error)
       }
     },
@@ -132,5 +144,4 @@ export default {
   margin-right: auto;
   margin-left: auto;
 }
-
 </style>

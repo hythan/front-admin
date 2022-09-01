@@ -86,11 +86,11 @@ export default {
         return
       }
 
-      if(this.isEdit) {
-        return this.editAdmin();
+      if (this.isEdit) {
+        return this.editAdmin()
       }
 
-      return this.createAdmin();
+      return this.createAdmin()
     },
     editAdmin() {
       this.$axios
@@ -100,11 +100,9 @@ export default {
         })
     },
     createAdmin() {
-         this.$axios
-        .post(`admins`, this.form)
-        .then((response) => {
-          this.$router.push('/admins')
-        })
+      this.$axios.post(`admins`, this.form).then((response) => {
+        this.$router.push('/admins')
+      })
     },
   },
   mounted() {
