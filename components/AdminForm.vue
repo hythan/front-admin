@@ -94,7 +94,7 @@ export default {
     },
     editAdmin() {
       this.$axios
-        .patch(`admins/${this.$route.query.id}`, this.form)
+        .patch(`admins/${this.$route.params.id}`, this.form)
         .then((response) => {
           this.$router.push('/admins')
         })
@@ -109,9 +109,8 @@ export default {
     if (!this.isEdit) {
       return
     }
-
     this.$axios
-      .get(`admins/${this.$route.query.id}`, {
+      .get(`admins/${this.$route.params.id}`, {
         headers: {
           Authorization: `${this.$auth.$storage._state['_token.local']}`,
         },

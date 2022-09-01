@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="admins"
+      :items="students"
       item-key="name"
       class="elevation-1"
       :search="search"
@@ -10,11 +10,11 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Admins</v-toolbar-title
+          <v-toolbar-title>Students</v-toolbar-title
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <nuxt-link to="/admins/create" class="btn-create">
-            <v-btn color="primary" class="mb-2"> Create Admin</v-btn>
+          <nuxt-link to="/students/create" class="btn-create">
+            <v-btn color="primary" class="mb-2">Create Student</v-btn>
           </nuxt-link>
         </v-toolbar>
         <v-text-field
@@ -24,10 +24,10 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <nuxt-link :to="{ path: `/admins/${item.id}/edit` }"
+        <nuxt-link :to="{ path: '/students/edit', query: { id: item.id } }"
           ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
         >
-        <v-icon small @click="deleteAdmin(item.id)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteStudent(item.id)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -42,22 +42,14 @@ export default {
     return {
       search: '',
       calories: '',
-      admins: [],
+      students: [],
     }
   },
   computed: {
     headers() {
       return [
-        {
-          text: 'Id',
-          align: 'start',
-          sortable: false,
-          value: 'id',
-        },
-        {
-          text: 'Name',
-          value: 'name',
-        },
+        { text: 'CPF', value: 'cpf' },
+        { text: 'Name',value: 'name' },
         { text: 'Email', value: 'email' },
         { text: 'Actions', value: 'actions' },
       ]
@@ -72,31 +64,32 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-    deleteAdmin(id) {
+    deleteStudent(id) {
       Swal.fire({
-        title: 'Are you sure to delete this admin?',
+        title: 'Are you sure to delete this student?',
         confirmButtonText: 'Remove',
         showCancelButton: true,
       }).then((result) => {
         if (!result.value) {
           return
         }
-        this.$axios.delete(`admins/${id}`).then((response) => {
-          Swal.fire('Admin was removed!', '', 'success')
-          this.getOrUpdateAdminsList();
+        
+        this.$axios.delete(`students/${id}`).then((response) => {
+          Swal.fire('Student was removed!', '', 'success')
+          this.getOrUpdateStudentsList()
         })
       })
     },
-    getOrUpdateAdminsList() {
-        this.$axios
-      .get('admins', {
-        headers: {
-          Authorization: `${this.$auth.$storage._state['_token.local']}`,
-        },
-      })
-      .then((response) => {
-        this.admins = response.data
-      })
+    getOrUpdateStudentsList() {
+      this.$axios
+        .get('students', {
+          headers: {
+            Authorization: `${this.$auth.$storage._state['_token.local']}`,
+          },
+        })
+        .then((response) => {
+          this.students = response.data
+        })
     },
   },
   mounted() {
@@ -104,7 +97,7 @@ export default {
       return
     }
 
-    this.getOrUpdateAdminsList();
+    this.getOrUpdateStudentsList()
   },
 }
 </script>

@@ -4,11 +4,6 @@
 
 <script >
 export default {
-   data() {
-    return {
-      title: "Teste Title"
-    }
-  },
 }
 </script>
 

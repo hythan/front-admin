@@ -22,3 +22,11 @@ extend('email_confirmation', {
   },
   message: 'Password confirmation does not match.',
 })
+
+extend('cpf', {
+  validate(value) {
+    const numbers = value.replace(/\D/g, "");
+    return numbers.length == 11
+  },
+  message: 'Insert a valid CPF.',
+})
