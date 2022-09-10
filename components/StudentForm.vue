@@ -44,36 +44,39 @@
           :error-messages="validationContext.errors[0]"
         />
       </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        :rules="this.isEdit ? '' : 'required'"
-        name="Password"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="form.password"
-          label="Password"
-          type="password"
-          :error-messages="validationContext.errors[0]"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        :rules="
-          this.form.password ? 'required|email_confirmation:@Password' : ''
-        "
-        name="PasswordConfirmation"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="passwordConfirmation"
-          label="Password Confirmation"
-          type="password"
-          :error-messages="validationContext.errors[0]"
-        />
-      </validation-provider>
+      <div v-if="!isShow">
+        <validation-provider
+          v-slot="validationContext"
+          :rules="this.isEdit ? '' : 'required'"
+          name="Password"
+          tag="div"
+          class="input-div-provider"
+        >
+          <v-text-field
+            v-model="form.password"
+            label="Password"
+            type="password"
+            :error-messages="validationContext.errors[0]"
+          />
+        </validation-provider>
+        <validation-provider
+          v-slot="validationContext"
+          :rules="
+            this.form.password ? 'required|email_confirmation:@Password' : ''
+          "
+          name="PasswordConfirmation"
+          tag="div"
+          class="input-div-provider"
+        >
+          <v-text-field
+            v-model="passwordConfirmation"
+            label="Password Confirmation"
+            type="password"
+            :error-messages="validationContext.errors[0]"
+          />
+        </validation-provider>
+      </div>
+
       <v-btn type="submit" class="btn-form-save"
         ><v-icon>mdi-content-save</v-icon>Salvar</v-btn
       >
@@ -85,7 +88,7 @@
 import Swal from 'sweetalert2'
 
 export default {
-  props: ['formTitle', 'isEdit'],
+  props: ['formTitle', 'isEdit', 'isShow'],
   data() {
     return {
       form: {

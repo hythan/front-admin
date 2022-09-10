@@ -24,6 +24,9 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
+         <nuxt-link :to="{ path: `/students/${item.id}` }"
+          ><v-icon small class="mr-2"> mdi-eye </v-icon></nuxt-link
+        >
         <nuxt-link :to="{ path: `/students/${item.id}/edit` }"
           ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
         >
@@ -73,7 +76,7 @@ export default {
         if (!result.value) {
           return
         }
-        
+
         this.$axios.delete(`students/${id}`).then((response) => {
           Swal.fire('Student was removed!', '', 'success')
           this.getOrUpdateStudentsList()
