@@ -14,6 +14,7 @@
           v-model="form.name"
           label="Name"
           :error-messages="validationContext.errors[0]"
+          :readonly="isShow"
         />
       </validation-provider>
       <validation-provider
@@ -29,6 +30,7 @@
           type="tel"
           :error-messages="validationContext.errors[0]"
           v-mask="'###.###.###-##'"
+          :readonly="isShow"
         />
       </validation-provider>
       <validation-provider
@@ -42,6 +44,7 @@
           v-model="form.email"
           label="Email"
           :error-messages="validationContext.errors[0]"
+          :readonly="isShow"
         />
       </validation-provider>
       <div v-if="!isShow">
@@ -77,9 +80,14 @@
         </validation-provider>
       </div>
 
-      <v-btn type="submit" class="btn-form-save"
-        ><v-icon>mdi-content-save</v-icon>Salvar</v-btn
-      >
+      <v-row>
+        <v-btn type="submit" class="btn-form-save"
+          ><nuxt-link :to="{ path: `/students` }"><v-icon>mdi-arrow-left-bold</v-icon>Voltar</nuxt-link></v-btn
+        >
+        <v-btn type="submit" class="btn-form-save"
+          ><v-icon>mdi-content-save</v-icon>Salvar</v-btn
+        >
+      </v-row>
     </form>
   </validation-observer>
 </template>
@@ -130,7 +138,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.isEdit) {
+    if (!this.isEdit && !this.isShow) {
       return
     }
 
@@ -156,6 +164,6 @@ export default {
 .btn-form-save {
   max-width: 100px;
   margin: auto;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 </style>
