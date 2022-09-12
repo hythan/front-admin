@@ -1,5 +1,5 @@
 <template>
-  <validation-observer ref="student_form">
+  <validation-observer ref="teacher_form">
     <form @submit.prevent="submit" class="card card-md">
       <h2 class="form-title text-center">{{ formTitle }}</h2>
 
@@ -19,22 +19,6 @@
       </validation-provider>
       <validation-provider
         v-slot="validationContext"
-        rules="required|cpf"
-        name="CPF"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="form.cpf"
-          label="CPF"
-          type="tel"
-          :error-messages="validationContext.errors[0]"
-          v-mask="'###.###.###-##'"
-          :readonly="isShow"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
         rules="required|email"
         name="Email"
         tag="div"
@@ -43,6 +27,21 @@
         <v-text-field
           v-model="form.email"
           label="Email"
+          :error-messages="validationContext.errors[0]"
+          :readonly="isShow"
+        />
+      </validation-provider>
+      <validation-provider
+        v-slot="validationContext"
+        rules="required"
+        name="Curriculum"
+        tag="div"
+        class="input-div-provider"
+      >
+        <v-textarea
+          v-model="form.curriculum"
+          label="Curriculum"
+          type="tel"
           :error-messages="validationContext.errors[0]"
           :readonly="isShow"
         />
@@ -105,7 +104,7 @@ export default {
     return {
       form: {
         name: '',
-        cpf: '',
+        curriculum: '',
         email: '',
         password: '',
       },
@@ -114,7 +113,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      const isValid = await this.$refs.student_form.validate()
+      const isValid = await this.$refs.teacher_form.validate()
 
       if (!isValid) {
         return
