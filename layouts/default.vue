@@ -30,8 +30,8 @@
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
       <v-toolbar-title v-text="title" />
-      <v-spacer/>
-      <v-toolbar-title v-text="userName"/>
+      <v-spacer />
+      <v-toolbar-title v-text="userName" />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -69,19 +69,34 @@ export default {
           to: '/',
         },
         {
-          icon: 'mdi-account-group',
+          icon: 'mdi-shield-crown',
           title: 'Admins',
-          to: '/admins'
+          to: '/admins',
         },
         {
           icon: 'mdi-account-school',
           title: 'Students',
-          to: '/students'
+          to: '/students',
         },
         {
           icon: 'mdi-account-tie',
           title: 'Teachers',
-          to: '/teachers'
+          to: '/teachers',
+        },
+        {
+          icon: 'mdi-school',
+          title: 'Courses',
+          to: '/courses',
+        },
+        {
+          icon: 'mdi-account-group',
+          title: 'Classes',
+          to: '/classes',
+        },
+        {
+          icon: 'mdi-account-plus',
+          title: 'Registrations',
+          to: '/registrations',
         },
       ],
       miniVariant: false,
@@ -92,12 +107,12 @@ export default {
   },
   computed: {
     userName() {
-      if(!this.$auth.loggedIn){
-        return '';
+      if (!this.$auth.loggedIn) {
+        return ''
       }
 
-      return this.$auth.$state.user.emails;
-    }
-  }
+      return this.$auth.$state.user.emails
+    },
+  },
 }
 </script>
