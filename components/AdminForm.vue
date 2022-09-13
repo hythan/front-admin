@@ -89,10 +89,10 @@ export default {
       }
 
       if (this.isEdit) {
-        return this.editAdmin()
+        return this.editAdmin();
       }
 
-      return this.createAdmin()
+      return this.createAdmin();
     },
     editAdmin() {
       this.$axios

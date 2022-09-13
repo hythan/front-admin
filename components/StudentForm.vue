@@ -86,10 +86,15 @@
             <v-icon>mdi-arrow-left-bold</v-icon>Voltar
           </nuxt-link>
         </v-btn>
-        <v-btn type="submit" class="btn-form">
-          <nuxt-link :to="{ path: `/students/${this.$route.params.id}/edit` }">
-            <v-icon>mdi-pencil</v-icon>Editar
-          </nuxt-link>
+        <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
+          <div v-if="this.isShow">
+            <nuxt-link
+              :to="{ path: `/students/${this.$route.params.id}/edit` }"
+            >
+              <v-icon>mdi-pencil</v-icon>Editar
+            </nuxt-link>
+          </div>
+          <div v-else><v-icon>mdi-content-save</v-icon> Salvar</div>
         </v-btn>
       </v-row>
     </form>
@@ -117,12 +122,13 @@ export default {
       const isValid = await this.$refs.student_form.validate()
 
       if (!isValid) {
-        return
+        return;
       }
       if (this.isEdit) {
-        this.updateStudent()
+        return this.updateStudent();
       }
-      this.createStudent()
+
+      return this.createStudent();
     },
 
     createStudent() {

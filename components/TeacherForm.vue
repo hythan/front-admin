@@ -46,49 +46,21 @@
           :readonly="isShow"
         />
       </validation-provider>
-      <div v-if="!isShow">
-        <validation-provider
-          v-slot="validationContext"
-          :rules="this.isEdit ? '' : 'required'"
-          name="Password"
-          tag="div"
-          class="input-div-provider"
-        >
-          <v-text-field
-            v-model="form.password"
-            label="Password"
-            type="password"
-            :error-messages="validationContext.errors[0]"
-          />
-        </validation-provider>
-        <validation-provider
-          v-slot="validationContext"
-          :rules="
-            this.form.password ? 'required|email_confirmation:@Password' : ''
-          "
-          name="PasswordConfirmation"
-          tag="div"
-          class="input-div-provider"
-        >
-          <v-text-field
-            v-model="passwordConfirmation"
-            label="Password Confirmation"
-            type="password"
-            :error-messages="validationContext.errors[0]"
-          />
-        </validation-provider>
-      </div>
-
       <v-row>
         <v-btn type="submit" class="btn-form">
-          <nuxt-link :to="{ path: `/students` }">
+          <nuxt-link :to="{ path: `/teachers` }">
             <v-icon>mdi-arrow-left-bold</v-icon>Voltar
           </nuxt-link>
         </v-btn>
-        <v-btn type="submit" class="btn-form">
-          <nuxt-link :to="{ path: `/students/${this.$route.params.id}/edit` }">
-            <v-icon>mdi-pencil</v-icon>Editar
-          </nuxt-link>
+        <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
+          <div v-if="this.isShow">
+            <nuxt-link
+              :to="{ path: `/teachers/${this.$route.params.id}/edit` }"
+            >
+              <v-icon>mdi-pencil</v-icon>Editar
+            </nuxt-link>
+          </div>
+          <div v-else><v-icon>mdi-content-save</v-icon> Salvar</div>
         </v-btn>
       </v-row>
     </form>
@@ -106,9 +78,7 @@ export default {
         name: '',
         curriculum: '',
         email: '',
-        password: '',
       },
-      passwordConfirmation: '',
     }
   },
   methods: {
@@ -118,25 +88,27 @@ export default {
       if (!isValid) {
         return
       }
+
       if (this.isEdit) {
-        this.updateStudent()
+        return this.updateTeacher();
       }
-      this.createStudent()
+
+      return this.createTeacher();
     },
 
-    createStudent() {
-      this.$axios.post('students', this.form).then((response) => {
-        this.$router.push('/students')
-        Swal.fire('Student was created!', '', 'success')
+    createTeacher() {
+      this.$axios.post('teachers', this.form).then((response) => {
+        this.$router.push('/teachers')
+        Swal.fire('Teacher was created!', '', 'success')
       })
     },
 
-    updateStudent() {
+    updateTeacher() {
       this.$axios
-        .patch(`students/${this.$route.params.id}`, this.form)
+        .patch(`teachers/${this.$route.params.id}`, this.form)
         .then((response) => {
-          this.$router.push('/students')
-          Swal.fire('Student was updated!', '', 'success')
+          this.$router.push('/teachers')
+          Swal.fire('Teacher was updated!', '', 'success')
         })
     },
   },
@@ -145,9 +117,9 @@ export default {
       return
     }
 
-    this.$axios.get(`students/${this.$route.params.id}`).then((response) => {
+    this.$axios.get(`teachers/${this.$route.params.id}`).then((response) => {
       this.form.name = response.data.name
-      this.form.cpf = response.data.cpf
+      this.form.curriculum = response.data.curriculum
       this.form.email = response.data.email
     })
   },

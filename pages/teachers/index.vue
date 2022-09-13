@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="students"
+      :items="teachers"
       item-key="name"
       class="elevation-1"
       :search="search"
@@ -30,7 +30,7 @@
         <nuxt-link :to="{ path: `/teachers/${item.id}/edit` }"
           ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
         >
-        <v-icon small @click="deleteStudent(item.id)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteTeacher(item.id)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -51,7 +51,6 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'CPF', value: 'cpf' },
         { text: 'Name',value: 'name' },
         { text: 'Email', value: 'email' },
         { text: 'Actions', value: 'actions' },
@@ -67,9 +66,9 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-    deleteStudent(id) {
+    deleteTeacher(id) {
       Swal.fire({
-        title: 'Are you sure to delete this student?',
+        title: 'Are you sure to delete this teacher?',
         confirmButtonText: 'Remove',
         showCancelButton: true,
       }).then((result) => {
@@ -78,7 +77,7 @@ export default {
         }
 
         this.$axios.delete(`teachers/${id}`).then((response) => {
-          Swal.fire('Student was removed!', '', 'success')
+          Swal.fire('Teacher was removed!', '', 'success')
           this.getOrUpdateTeachersList()
         })
       })
@@ -91,7 +90,7 @@ export default {
           },
         })
         .then((response) => {
-          this.students = response.data
+          this.teachers = response.data
         })
     },
   },
@@ -104,6 +103,3 @@ export default {
   },
 }
 </script>
-
-<style>
-</style>
