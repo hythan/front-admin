@@ -82,23 +82,23 @@
         class="input-div-provider"
       >
         <v-text-field
+          ref="inputRef"
           v-model="form.price"
           label="Price"
           :error-messages="validationContext.errors[0]"
           :readonly="isShow"
-          type="number"
         />
       </validation-provider>
       <v-row>
         <v-btn type="submit" class="btn-form">
-          <nuxt-link :to="{ path: `/teachers` }">
+          <nuxt-link :to="{ path: `/courses` }">
             <v-icon>mdi-arrow-left-bold</v-icon>Voltar
           </nuxt-link>
         </v-btn>
         <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
           <div v-if="this.isShow">
             <nuxt-link
-              :to="{ path: `/teachers/${this.$route.params.id}/edit` }"
+              :to="{ path: `/courses/${this.$route.params.id}/edit` }"
             >
               <v-icon>mdi-pencil</v-icon>Editar
             </nuxt-link>
@@ -112,6 +112,8 @@
 
 <script>
 import Swal from 'sweetalert2'
+import { useCurrencyInput } from 'vue-currency-input'
+import { watch } from 'vue'
 
 export default {
   props: ['formTitle', 'isEdit', 'isShow'],
@@ -135,6 +137,8 @@ export default {
         return
       }
 
+      this.form.price = Number(this.form.price.replace(/\D/g, ''))
+      this.form.duration = Number(this.form.duration)
       if (this.isEdit) {
         return this.updateTeacher()
       }
@@ -143,18 +147,18 @@ export default {
     },
 
     createTeacher() {
-      this.$axios.post('teachers', this.form).then((response) => {
-        this.$router.push('/teachers')
-        Swal.fire('Teacher was created!', '', 'success')
+      this.$axios.post('courses', this.form).then((response) => {
+        this.$router.push('/courses')
+        Swal.fire('Course was created!', '', 'success')
       })
     },
 
     updateTeacher() {
       this.$axios
-        .patch(`teachers/${this.$route.params.id}`, this.form)
+        .patch(`courses/${this.$route.params.id}`, this.form)
         .then((response) => {
-          this.$router.push('/teachers')
-          Swal.fire('Teacher was updated!', '', 'success')
+          this.$router.push('/courses')
+          Swal.fire('Course was updated!', '', 'success')
         })
     },
   },
@@ -163,11 +167,37 @@ export default {
       return
     }
 
-    this.$axios.get(`teachers/${this.$route.params.id}`).then((response) => {
+    this.$axios.get(`courses/${this.$route.params.id}`).then((response) => {
       this.form.name = response.data.name
-      this.form.curriculum = response.data.curriculum
-      this.form.email = response.data.email
+      this.form.information = response.data.information
+      this.form.goal = response.data.goal
+      this.form.requirements = response.data.requirements
+      this.form.duration = response.data.duration
+      this.form.price = response.data.price
+
     })
+  },
+  setup(props) {
+    const { inputRef, setValue } = useCurrencyInput({
+      currency: 'BRL',
+      currencyDisplay: 'symbol',
+      precision: 2,
+      hideCurrencySymbolOnFocus: true,
+      hideGroupingSeparatorOnFocus: true,
+      hideNegligibleDecimalDigitsOnFocus: true,
+      autoDecimalDigits: false,
+      exportValueAsInteger: false,
+      autoSign: false,
+      useGrouping: true,
+    });
+    console.log(props);
+    watch(() => props.modelValue, // Vue 2: props.value
+      (value) => {
+        setValue(value)
+      }
+    )
+
+    return { inputRef }
   },
 }
 </script>
