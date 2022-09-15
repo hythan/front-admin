@@ -30,7 +30,7 @@
         <nuxt-link :to="{ path: `/courses/${item.id}/edit` }"
           ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
         >
-        <v-icon small @click="deleteTeacher(item.id)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteCourse(item.id)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -64,7 +64,7 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-    deleteTeacher(id) {
+    deleteCourse(id) {
       Swal.fire({
         title: 'Are you sure to delete this course?',
         confirmButtonText: 'Remove',

@@ -87,6 +87,7 @@
           label="Price"
           :error-messages="validationContext.errors[0]"
           :readonly="isShow"
+          v-mask="'######,##'"
         />
       </validation-provider>
       <v-row>
@@ -97,9 +98,7 @@
         </v-btn>
         <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
           <div v-if="this.isShow">
-            <nuxt-link
-              :to="{ path: `/courses/${this.$route.params.id}/edit` }"
-            >
+            <nuxt-link :to="{ path: `/courses/${this.$route.params.id}/edit` }">
               <v-icon>mdi-pencil</v-icon>Editar
             </nuxt-link>
           </div>
@@ -113,7 +112,6 @@
 <script>
 import Swal from 'sweetalert2'
 import { useCurrencyInput } from 'vue-currency-input'
-import { watch } from 'vue'
 
 export default {
   props: ['formTitle', 'isEdit', 'isShow'],
@@ -168,34 +166,20 @@ export default {
     }
 
     this.$axios.get(`courses/${this.$route.params.id}`).then((response) => {
-      this.form.name = response.data.name
-      this.form.information = response.data.information
-      this.form.goal = response.data.goal
-      this.form.requirements = response.data.requirements
-      this.form.duration = response.data.duration
-      this.form.price = response.data.price
-
+      this.form = response.data
     })
   },
   setup(props) {
-    const { inputRef, setValue } = useCurrencyInput({
+    const brlOptions = {
       currency: 'BRL',
       currencyDisplay: 'symbol',
       precision: 2,
-      hideCurrencySymbolOnFocus: true,
-      hideGroupingSeparatorOnFocus: true,
-      hideNegligibleDecimalDigitsOnFocus: true,
-      autoDecimalDigits: false,
+      autoDecimalDigits: true,
       exportValueAsInteger: false,
       autoSign: false,
       useGrouping: true,
-    });
-    console.log(props);
-    watch(() => props.modelValue, // Vue 2: props.value
-      (value) => {
-        setValue(value)
-      }
-    )
+    }
+    const { inputRef } = useCurrencyInput(brlOptions)
 
     return { inputRef }
   },
