@@ -138,20 +138,20 @@ export default {
       this.form.price = Number(this.form.price.replace(/\D/g, ''))
       this.form.duration = Number(this.form.duration)
       if (this.isEdit) {
-        return this.updateTeacher()
+        return this.updateCourse()
       }
 
-      return this.createTeacher()
+      return this.createCourse()
     },
 
-    createTeacher() {
+    createCourse() {
       this.$axios.post('courses', this.form).then((response) => {
         this.$router.push('/courses')
         Swal.fire('Course was created!', '', 'success')
       })
     },
 
-    updateTeacher() {
+    updateCourse() {
       this.$axios
         .patch(`courses/${this.$route.params.id}`, this.form)
         .then((response) => {
