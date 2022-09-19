@@ -49,9 +49,9 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'Name',value: 'name' },
-        { text: 'Curso',value: 'courseId' },
-        { text: 'Start Date',value: 'startDate' },
+        { text: 'Name', value: 'name' },
+        { text: 'Curso', value: 'courseId' },
+        { text: 'Start Date', value: 'startDate' },
         { text: 'Actions', value: 'actions' },
       ]
     },
@@ -67,7 +67,7 @@ export default {
     },
     deleteClass(id) {
       Swal.fire({
-        title: 'Are you sure to delete this course?',
+        title: 'Are you sure to delete this class?',
         confirmButtonText: 'Remove',
         showCancelButton: true,
       }).then((result) => {
@@ -89,7 +89,11 @@ export default {
           },
         })
         .then((response) => {
-          this.classes = response.data
+          console.log(response.data);
+          this.classes = response.data;
+          this.classes.forEach(element => {
+            element.startDate = element.startDate.substr(0, 10);
+          });
         })
     },
   },

@@ -1,3 +1,3 @@
 <template>
-  <AdminForm :formTitle="'Create Class'"/>
+  <ClassForm :formTitle="'Create Class'"/>
 </template>
