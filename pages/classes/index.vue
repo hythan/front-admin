@@ -89,10 +89,10 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
           this.classes = response.data;
           this.classes.forEach(element => {
             element.startDate = element.startDate.substr(0, 10);
+            element.courseId = element.course.name;
           });
         })
     },

@@ -183,7 +183,6 @@ export default {
     },
 
     createClass() {
-      console.log(this.form);
       this.$axios.post('classes', this.form).then(() => {
         this.$router.push('/classes')
         Swal.fire('Class was created!', '', 'success')
@@ -191,8 +190,6 @@ export default {
     },
 
     updateClass() {
-      console.log(this.form);
-
       this.$axios
         .patch(`classes/${this.$route.params.id}`, this.form)
         .then(() => {
