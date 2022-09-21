@@ -1,13 +1,3 @@
 <template>
-  <StudentForm :isShow="true"/>
+  <StudentForm :isShow="true" :formTitle="'Student Info'"/>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>

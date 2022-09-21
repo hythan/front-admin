@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="classes"
+      :items="registrations"
       item-key="name"
       class="elevation-1"
       :search="search"
@@ -14,7 +14,7 @@
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <nuxt-link to="/classes/create" class="btn-create">
-            <v-btn color="primary" class="mb-2">Create Class</v-btn>
+            <v-btn color="primary" class="mb-2">Create Course</v-btn>
           </nuxt-link>
         </v-toolbar>
         <v-text-field
@@ -24,16 +24,8 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <nuxt-link :to="{ path: `/classes/${item.id}/registrations` }">
-          <v-icon small class="mr-2"> mdi-account-plus </v-icon>
-        </nuxt-link>
-        <nuxt-link :to="{ path: `/classes/${item.id}` }">
-          <v-icon small class="mr-2"> mdi-eye </v-icon>
-        </nuxt-link>
-        <nuxt-link :to="{ path: `/classes/${item.id}/edit` }">
-          <v-icon small class="mr-2"> mdi-pencil </v-icon>
-        </nuxt-link>
-        <v-icon small @click="deleteClass(item.id)"> mdi-delete </v-icon>
+        <v-icon small @click="approveRegistration(item.id)"> mdi-check-bold </v-icon>
+        <v-icon small @click="cancelRegistration(item.id)"> mdi-close-thick </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -46,16 +38,14 @@ export default {
   data() {
     return {
       search: '',
-      classes: [],
+      registrations: [],
     }
   },
   computed: {
     headers() {
       return [
         { text: 'Name', value: 'name', align: 'center' },
-        { text: 'Curso', value: 'courseId', align: 'center' },
-        { text: 'Start Date', value: 'startDate', align: 'center' },
-        { text: 'Registrations', value: 'registrations', align: 'center' },
+        { text: 'Situation', value: 'status', align: 'center' },
         { text: 'Actions', value: 'actions', align: 'center' },
       ]
     },
@@ -69,9 +59,10 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-    deleteClass(id) {
+    cancelRegistration(id) {
+      console.log(id);
       Swal.fire({
-        title: 'Are you sure to delete this class?',
+        title: 'Are you sure to mark this registration as NOT completed?',
         confirmButtonText: 'Remove',
         showCancelButton: true,
       }).then((result) => {
@@ -87,24 +78,30 @@ export default {
     },
     getOrUpdateClassesList() {
       this.$axios
-        .get('classes', {
+        .get(`classes/${this.$route.params.id}`, {
           headers: {
             Authorization: `${this.$auth.$storage._state['_token.local']}`,
           },
         })
         .then((response) => {
-          this.classes = response.data
+          this.setClassListDatas(response.data.registrations)
         })
-        .finally(() => {
-          this.setClassListDatas()
-        })
+        .finally(() => {})
     },
 
-    setClassListDatas() {
-      this.classes.forEach((element) => {
-        element.startDate = element.startDate.substr(0, 10)
-        element.courseId = element.course.name
-        element.registrations = element.registrations.length
+    setClassListDatas(registrations) {
+      const obj = {
+        id: '',
+        name: '',
+        status: '',
+      }
+      registrations.forEach((element) => {
+        obj.id = element.id
+        obj.name = element.student.name
+        obj.status = element.complete ? 'Complete' : 'Incomplete'
+        console.log(obj);
+
+        this.registrations.push(obj)
       })
     },
   },

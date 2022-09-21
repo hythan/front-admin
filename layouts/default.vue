@@ -93,11 +93,6 @@ export default {
           title: 'Classes',
           to: '/classes',
         },
-        {
-          icon: 'mdi-account-plus',
-          title: 'Registrations',
-          to: '/registrations',
-        },
       ],
       miniVariant: false,
       right: true,
