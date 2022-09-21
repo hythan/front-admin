@@ -1,94 +1,20 @@
 <template>
-  <validation-observer ref="class_form">
+  <validation-observer ref="registration_form">
     <form @submit.prevent="submit" class="card card-md">
       <h2 class="form-title text-center">{{ formTitle }}</h2>
-
       <validation-provider
         v-slot="validationContext"
         rules="required"
-        name="Name"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="form.name"
-          label="Name"
-          :error-messages="validationContext.errors[0]"
-          :readonly="isShow"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Course"
+        name="Student"
         tag="div"
         class="input-div-provider"
       >
         <v-select
-          v-model="form.courseId"
-          :items="courses"
-          item-text="name"
-          item-value="id"
-          label="Course"
-          :error-messages="validationContext.errors[0]"
-          required
-        ></v-select>
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Information"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-textarea
-          v-model="form.information"
-          label="Information"
-          :error-messages="validationContext.errors[0]"
-          :readonly="isShow"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Location"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="form.location"
-          label="Location"
-          :error-messages="validationContext.errors[0]"
-          :readonly="isShow"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Class Time"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-text-field
-          v-model="form.classTimes"
-          label="Class Time"
-          :error-messages="validationContext.errors[0]"
-          :readonly="isShow"
-        />
-      </validation-provider>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Teacher"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-select
-          v-model="form.teacherId"
+          v-model="form.student"
           :items="teachers"
-          item-text="name"
+          item-text="cpf"
           item-value="id"
-          label="Teacher"
+          label="Student"
           :error-messages="validationContext.errors[0]"
           required
         ></v-select>
@@ -165,7 +91,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      const isValid = await this.$refs.class_form.validate()
+      const isValid = await this.$refs.registration_form.validate()
 
       if (!isValid) {
         return
@@ -228,7 +154,7 @@ export default {
 
     this.$axios.get(`classes/${this.$route.params.id}`).then((response) => {
       this.form = response.data
-      this.form.startDate = this.form.startDate.substr(0, 10)
+      this.form.startDate = this.form.startDate.substr(0, 10);
     })
   },
 }

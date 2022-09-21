@@ -47,11 +47,7 @@
         />
       </validation-provider>
       <v-row>
-        <v-btn type="submit" class="btn-form">
-          <nuxt-link :to="{ path: `/teachers` }">
-            <v-icon>mdi-arrow-left-bold</v-icon>Voltar
-          </nuxt-link>
-        </v-btn>
+        <BackBtn />
         <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
           <div v-if="this.isShow">
             <nuxt-link

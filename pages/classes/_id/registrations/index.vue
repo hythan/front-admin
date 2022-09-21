@@ -10,11 +10,11 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Classes</v-toolbar-title
+          <v-toolbar-title>{{className}}</v-toolbar-title
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <nuxt-link to="/classes/create" class="btn-create">
-            <v-btn color="primary" class="mb-2">Create Course</v-btn>
+          <nuxt-link :to="{ path: `/classes/${$route.params.id}/registrations/create` }" class="btn-create">
+            <v-btn color="primary" class="mb-2">Create Registration</v-btn>
           </nuxt-link>
         </v-toolbar>
         <v-text-field
@@ -24,8 +24,12 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small @click="approveRegistration(item.id)"> mdi-check-bold </v-icon>
-        <v-icon small @click="cancelRegistration(item.id)"> mdi-close-thick </v-icon>
+        <v-icon small @click="approveRegistration(item.id)">
+          mdi-check-bold
+        </v-icon>
+        <v-icon small @click="cancelRegistration(item.id)">
+          mdi-close-thick
+        </v-icon>
       </template>
     </v-data-table>
   </div>
@@ -37,6 +41,7 @@ import Swal from 'sweetalert2'
 export default {
   data() {
     return {
+      className: '',
       search: '',
       registrations: [],
     }
@@ -59,22 +64,37 @@ export default {
         value.toString().toLocaleLowerCase().indexOf(search) !== -1
       )
     },
-    cancelRegistration(id) {
-      console.log(id);
+    approveRegistration(id) {
       Swal.fire({
-        title: 'Are you sure to mark this registration as NOT completed?',
-        confirmButtonText: 'Remove',
+        title: 'Are you sure to mark this registration as COMPLETE?',
+        confirmButtonText: 'Update',
         showCancelButton: true,
       }).then((result) => {
         if (!result.value) {
           return
         }
-
-        this.$axios.delete(`classes/${id}`).then((response) => {
-          Swal.fire('Class was removed!', '', 'success')
+        this.updateRegistrationStatus(id, true)
+      })
+    },
+    cancelRegistration(id) {
+      Swal.fire({
+        title: 'Are you sure to mark this registration as INCOMPLETE?',
+        confirmButtonText: 'Update',
+        showCancelButton: true,
+      }).then((result) => {
+        if (!result.value) {
+          return
+        }
+        this.updateRegistrationStatus(id, false)
+      })
+    },
+    updateRegistrationStatus(id, status) {
+      this.$axios
+        .patch(`registrations/${id}`, { complete: status })
+        .then(() => {
+          Swal.fire('Status was updated!', '', 'success')
           this.getOrUpdateClassesList()
         })
-      })
     },
     getOrUpdateClassesList() {
       this.$axios
@@ -84,24 +104,23 @@ export default {
           },
         })
         .then((response) => {
-          this.setClassListDatas(response.data.registrations)
+          this.className = response.data.name;
+          this.registrations = [];
+          this.setClassListDatas(response.data.registrations);
         })
-        .finally(() => {})
     },
 
     setClassListDatas(registrations) {
-      const obj = {
-        id: '',
-        name: '',
-        status: '',
-      }
       registrations.forEach((element) => {
-        obj.id = element.id
-        obj.name = element.student.name
-        obj.status = element.complete ? 'Complete' : 'Incomplete'
-        console.log(obj);
-
-        this.registrations.push(obj)
+        let objAux = {
+          id: '',
+          name: '',
+          status: '',
+        }
+        objAux.id = element.id
+        objAux.name = element.student.name
+        objAux.status = element.complete ? 'Complete' : 'Incomplete'
+        this.registrations.push(objAux)
       })
     },
   },

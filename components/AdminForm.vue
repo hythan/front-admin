@@ -60,9 +60,12 @@
             :error-messages="validationContext.errors[0]"
           />
         </validation-provider>
-        <v-btn class="btn-form-save" type="submit"
-          ><v-icon>mdi-content-save</v-icon> Salvar</v-btn
-        >
+        <v-row>
+          <BackBtn />
+          <v-btn type="submit" class="btn-form">
+           <v-icon>mdi-content-save</v-icon> Salvar
+          </v-btn>
+        </v-row>
       </form>
     </validation-observer>
   </div>
@@ -89,10 +92,10 @@ export default {
       }
 
       if (this.isEdit) {
-        return this.editAdmin();
+        return this.editAdmin()
       }
 
-      return this.createAdmin();
+      return this.createAdmin()
     },
     editAdmin() {
       this.$axios
@@ -132,14 +135,19 @@ export default {
   margin: 0 15px 5px 15px;
 }
 
-.btn-form-save {
-  max-width: 100px;
-  margin: auto;
-  margin-bottom: 15px;
-}
-
 .form-title {
   margin-top: 10px;
   text-shadow: 1px 1px 2px rgb(112, 112, 112);
+}
+
+.btn-form {
+  max-width: 100px;
+  margin: auto;
+  margin-bottom: 25px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
