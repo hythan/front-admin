@@ -1,183 +1,43 @@
 <template>
-  <validation-observer ref="registration_form">
-    <form @submit.prevent="submit" class="card card-md">
-      <h2 class="form-title text-center">{{ formTitle }}</h2>
-      <validation-provider
-        v-slot="validationContext"
-        rules="required"
-        name="Student"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-select
-          v-model="form.student"
-          :items="teachers"
-          item-text="cpf"
-          item-value="id"
-          label="Student"
-          :error-messages="validationContext.errors[0]"
-          required
-        ></v-select>
-      </validation-provider>
-      <validation-provider
-        rules="required"
-        name="Start Date"
-        tag="div"
-        class="input-div-provider"
-      >
-        <v-menu
-          v-model="menu"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-          max-width="290px"
-          min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="computedDateFormatted"
-              label="Start Date"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="form.startDate"
-            no-title
-            @input="menu = false"
-            :readonly="isShow"
-          ></v-date-picker>
-        </v-menu>
-      </validation-provider>
-      <v-row>
-        <BackBtn />
-        <v-btn :type="this.isShow ? 'button' : 'submit'" class="btn-form">
-          <div v-if="this.isShow">
-            <nuxt-link :to="{ path: `/classes/${this.$route.params.id}/edit` }">
-              <v-icon>mdi-pencil</v-icon>Editar
-            </nuxt-link>
-          </div>
-          <div v-else><v-icon>mdi-content-save</v-icon> Salvar</div>
-        </v-btn>
-      </v-row>
-    </form>
-  </validation-observer>
+  <div>
+    <v-btn color="primary" class="ma-2" dark @click="dialog2 = true">
+      Open Dialog 2
+    </v-btn>
+    <v-dialog v-model="dialog2" max-width="500px">
+      <v-card>
+        <v-card-title> Dialog 2 </v-card-title>
+        <v-card-text>
+          <v-select
+            :items="students"
+            label="Select a Student"
+            item-value="id"
+            item-text="cpf"
+          ></v-select>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="dialog2 = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-
 export default {
-  props: ['formTitle', 'isEdit', 'isShow'],
+  props: ['studentsIds'],
   data() {
     return {
-      menu: false,
-      form: {
-        name: '',
-        courseId: '',
-        information: '',
-        location: '',
-        startDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-          .toISOString()
-          .substr(0, 10),
-        classTimes: '',
-        teacherId: '',
-      },
-      courses: [],
-      teachers: [],
+      dialog2: false,
+      students: [],
     }
-  },
-  methods: {
-    submit: async function () {
-      const isValid = await this.$refs.registration_form.validate()
-
-      if (!isValid) {
-        return
-      }
-
-      if (this.isEdit) {
-        return this.updateClass()
-      }
-
-      return this.createClass()
-    },
-
-    createClass() {
-      this.$axios.post('classes', this.form).then(() => {
-        this.$router.push('/classes')
-        Swal.fire('Class was created!', '', 'success')
-      })
-    },
-
-    updateClass() {
-      this.$axios
-        .patch(`classes/${this.$route.params.id}`, this.form)
-        .then(() => {
-          this.$router.push('/classes')
-          Swal.fire('Class was updated!', '', 'success')
-        })
-    },
-
-    formatDate(date) {
-      if (!date) return null
-
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-
-    getAllTeachers() {
-      this.$axios.get(`teachers`).then((response) => {
-        this.teachers = response.data
-      })
-    },
-
-    getAllCourses() {
-      this.$axios.get(`courses`).then((response) => {
-        this.courses = response.data
-      })
-    },
-  },
-  computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.form.startDate)
-    },
   },
   mounted() {
-    this.getAllTeachers()
-    this.getAllCourses()
-
-    if (!this.isEdit && !this.isShow) {
-      return
-    }
-
-    this.$axios.get(`classes/${this.$route.params.id}`).then((response) => {
-      this.form = response.data
-      this.form.startDate = this.form.startDate.substr(0, 10);
+    this.$axios.get('students', {studentsIds: this.studentsIds}).then((response) =>{
+      this.students = response.data
     })
   },
 }
 </script>
 
-<style scoped>
-.input-div-provider {
-  margin: 0 15px 5px 15px;
-}
-
-.form-title {
-  margin-top: 10px;
-  text-shadow: 1px 1px 2px rgb(112, 112, 112);
-}
-
-.btn-form {
-  max-width: 100px;
-  margin: auto;
-  margin-bottom: 25px;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
+<style>
 </style>

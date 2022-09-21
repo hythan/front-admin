@@ -13,9 +13,7 @@
           <v-toolbar-title>{{className}}</v-toolbar-title
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <nuxt-link :to="{ path: `/classes/${$route.params.id}/registrations/create` }" class="btn-create">
-            <v-btn color="primary" class="mb-2">Create Registration</v-btn>
-          </nuxt-link>
+          <RegistrationForm :studentsIds="studentsIds" />
         </v-toolbar>
         <v-text-field
           v-model="search"
@@ -44,6 +42,7 @@ export default {
       className: '',
       search: '',
       registrations: [],
+      studentsIds: [],
     }
   },
   computed: {
@@ -93,34 +92,35 @@ export default {
         .patch(`registrations/${id}`, { complete: status })
         .then(() => {
           Swal.fire('Status was updated!', '', 'success')
-          this.getOrUpdateClassesList()
+          this.getOrUpdateRegistrationsList()
         })
     },
-    getOrUpdateClassesList() {
-      this.$axios
+    async getOrUpdateRegistrationsList() {
+      await this.$axios
         .get(`classes/${this.$route.params.id}`, {
           headers: {
             Authorization: `${this.$auth.$storage._state['_token.local']}`,
           },
-        })
+        }).then(response => response)
         .then((response) => {
           this.className = response.data.name;
           this.registrations = [];
-          this.setClassListDatas(response.data.registrations);
+          this.setRegistrationsListData(response.data.registrations);
         })
     },
 
-    setClassListDatas(registrations) {
+    setRegistrationsListData(registrations) {
       registrations.forEach((element) => {
-        let objAux = {
+        let registrationObjectAux = {
           id: '',
           name: '',
           status: '',
         }
-        objAux.id = element.id
-        objAux.name = element.student.name
-        objAux.status = element.complete ? 'Complete' : 'Incomplete'
-        this.registrations.push(objAux)
+        registrationObjectAux.id = element.id
+        registrationObjectAux.name = element.student.name
+        registrationObjectAux.status = element.complete ? 'Complete' : 'Incomplete'
+        this.registrations.push(registrationObjectAux)
+        this.studentsIds.push(element.student.id);
       })
     },
   },
@@ -129,7 +129,7 @@ export default {
       return
     }
 
-    this.getOrUpdateClassesList()
+    this.getOrUpdateRegistrationsList()
   },
 }
 </script>
