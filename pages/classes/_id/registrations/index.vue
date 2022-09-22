@@ -108,7 +108,7 @@ export default {
           this.setRegistrationsListData(response.data.registrations)
         })
         .finally(() => {
-          this.$store.commit('students/SET_STUDENTS_IDS', this.studentsIds)
+          this.$store.commit('students/SET_STUDENTS_IDS', this.studentsIds);
         })
     },
 

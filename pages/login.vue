@@ -79,9 +79,16 @@ export default {
       },
     }
   },
-  created: function () {
+  created() {
     if (this.$auth.loggedIn) {
-      this.$router.push('/')
+      if (this.$auth.$storage.getUniversal('redirect')) {
+        this.$router.replace(this.$auth.$storage.getUniversal('redirect'))
+        this.$auth.$storage.removeUniversal('redirect')
+        return
+      }
+
+      this.$router.replace('/')
+      return
     }
   },
   methods: {
@@ -93,7 +100,7 @@ export default {
       }
 
       try {
-        const response = await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('local', {
           data: {
             email: this.form.email,
             password: this.form.password,
