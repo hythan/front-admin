@@ -32,9 +32,16 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('students', {studentsIds: this.studentsIds}).then((response) =>{
-      this.students = response.data
-    })
+    const studentsIdsJson = JSON.parse(JSON.stringify(this.$store.state.students.studentsIds));
+    this.$axios
+      .get('students', {
+        params: {
+          students_ids: studentsIdsJson
+        }
+      })
+      .then((response) => {
+        this.students = response.data
+      })
   },
 }
 </script>

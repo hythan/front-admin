@@ -10,7 +10,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>{{className}}</v-toolbar-title
+          <v-toolbar-title>{{ className }}</v-toolbar-title
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <RegistrationForm :studentsIds="studentsIds" />
@@ -101,11 +101,14 @@ export default {
           headers: {
             Authorization: `${this.$auth.$storage._state['_token.local']}`,
           },
-        }).then(response => response)
+        })
         .then((response) => {
-          this.className = response.data.name;
-          this.registrations = [];
-          this.setRegistrationsListData(response.data.registrations);
+          this.className = response.data.name
+          this.registrations = []
+          this.setRegistrationsListData(response.data.registrations)
+        })
+        .finally(() => {
+          this.$store.commit('students/SET_STUDENTS_IDS', this.studentsIds)
         })
     },
 
@@ -118,9 +121,11 @@ export default {
         }
         registrationObjectAux.id = element.id
         registrationObjectAux.name = element.student.name
-        registrationObjectAux.status = element.complete ? 'Complete' : 'Incomplete'
+        registrationObjectAux.status = element.complete
+          ? 'Complete'
+          : 'Incomplete'
         this.registrations.push(registrationObjectAux)
-        this.studentsIds.push(element.student.id);
+        this.studentsIds.push(element.student.id)
       })
     },
   },
