@@ -24,8 +24,11 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
+         <nuxt-link :to="{ path: `/classes/${item.id}/certifications` }">
+          <v-icon small class="mr-2" > mdi-account-school </v-icon>
+        </nuxt-link>
         <nuxt-link :to="{ path: `/classes/${item.id}/registrations` }">
-          <v-icon small class="mr-2"> mdi-account-plus </v-icon>
+          <v-icon small class="mr-2" > mdi-account-plus </v-icon>
         </nuxt-link>
         <nuxt-link :to="{ path: `/classes/${item.id}` }">
           <v-icon small class="mr-2"> mdi-eye </v-icon>
