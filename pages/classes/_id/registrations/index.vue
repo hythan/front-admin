@@ -13,7 +13,7 @@
           <v-toolbar-title>{{ className }}</v-toolbar-title
           ><v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <RegistrationForm :studentsIds="studentsIds" />
+          <RegistrationForm @saved="getOrUpdateRegistrationsList()" />
         </v-toolbar>
         <v-text-field
           v-model="search"
@@ -87,15 +87,15 @@ export default {
         this.updateRegistrationStatus(id, false)
       })
     },
-    updateRegistrationStatus(id, status) {
-      this.$axios
+    async updateRegistrationStatus(id, status) {
+      await this.$axios
         .patch(`registrations/${id}`, { complete: status })
         .then(() => {
           Swal.fire('Status was updated!', '', 'success')
-          this.getOrUpdateRegistrationsList()
         })
+      this.getOrUpdateRegistrationsList(false)
     },
-    async getOrUpdateRegistrationsList() {
+    async getOrUpdateRegistrationsList(flag = true) {
       await this.$axios
         .get(`classes/${this.$route.params.id}`, {
           headers: {
@@ -108,7 +108,7 @@ export default {
           this.setRegistrationsListData(response.data.registrations)
         })
         .finally(() => {
-          this.$store.commit('students/SET_STUDENTS_IDS', this.studentsIds);
+          this.$store.commit('students/SET_STUDENTS_IDS', this.studentsIds)
         })
     },
 
@@ -124,12 +124,13 @@ export default {
         registrationObjectAux.status = element.complete
           ? 'Complete'
           : 'Incomplete'
-        this.registrations.push(registrationObjectAux)
-        this.studentsIds.push(element.student.id)
+        this.registrations.push(registrationObjectAux);
+        this.studentsIds = [];
+        this.studentsIds.push(element.student.id);
       })
     },
   },
-  mounted() {
+  beforeMount() {
     if (!this.$auth.$storage._state['_token.local']) {
       return
     }

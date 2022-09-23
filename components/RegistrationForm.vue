@@ -44,7 +44,6 @@
 
 <script>
 export default {
-  props: ['studentsIds'],
   data() {
     return {
       dialog: false,
@@ -66,7 +65,7 @@ export default {
         })
         .then(() => {
           this.dialog = false
-          this.$router.go(0)
+          this.$emit('saved')
         })
     },
   },
