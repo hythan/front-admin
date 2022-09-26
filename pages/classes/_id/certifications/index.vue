@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-       v-model="selected"
+      v-model="selected"
       :headers="headers"
       :items="students"
       item-key="name"
@@ -70,14 +70,30 @@ export default {
     },
 
     generateCertifications() {
-      const payload ={
-        courseId: this.selected.courseId,
-        studentId: this.selected.studentId,
-        teacherName: this.selected.teacherName,
+      if (!this.selected.length) {
+        return;
       }
-      this.$axios.post('certifications', {payload}).then((response) => {
-        console.log(response);
-      })
+
+      if (this.selected.length == 1) {
+        this.$axios
+          .post('certifications', {
+            courseId: this.selected[0].courseId,
+            studentId: this.selected[0].studentId,
+            teacherName: this.selected[0].teacherName,
+          })
+          .then(() => {
+            return;
+          })
+
+      }
+
+      this.$axios
+        .post('certifications', {
+          certificationsList: this.selected,
+        })
+        .then((response) => {
+          console.log(response)
+        })
     },
 
     async getOrUpdateRegistrationsList() {
@@ -103,7 +119,7 @@ export default {
         studentObjAux.name = element.student.name
         studentObjAux.cpf = element.student.cpf
         studentObjAux.teacherName = element.class.teacher.name
-        this.students.push(studentObjAux);
+        this.students.push(studentObjAux)
       })
     },
   },
