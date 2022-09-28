@@ -22,12 +22,34 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small @click="approveRegistration(item.id)">
-          mdi-check-bold
-        </v-icon>
-        <v-icon small @click="cancelRegistration(item.id)">
-          mdi-close-thick
-        </v-icon>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="green"
+              small
+              @click="approveRegistration(item.id)"
+              v-bind="attrs"
+              v-on="on"
+            >
+              mdi-check-bold
+            </v-icon>
+          </template>
+          <span>Approve Registration</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="red"
+              small
+              @click="cancelRegistration(item.id)"
+              v-bind="attrs"
+              v-on="on"
+            >
+              mdi-close-thick
+            </v-icon>
+          </template>
+          <span>Cancel Registration</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </div>
@@ -124,9 +146,9 @@ export default {
         registrationObjectAux.status = element.complete
           ? 'Complete'
           : 'Incomplete'
-        this.registrations.push(registrationObjectAux);
-        this.studentsIds = [];
-        this.studentsIds.push(element.student.id);
+        this.registrations.push(registrationObjectAux)
+        this.studentsIds = []
+        this.studentsIds.push(element.student.id)
       })
     },
   },

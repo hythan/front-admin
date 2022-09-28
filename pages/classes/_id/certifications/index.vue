@@ -25,14 +25,6 @@
           class="mx-4"
         ></v-text-field>
       </template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small @click="approveRegistration(item.id)">
-          mdi-check-bold
-        </v-icon>
-        <v-icon small @click="cancelRegistration(item.id)">
-          mdi-close-thick
-        </v-icon>
-      </template>
     </v-data-table>
   </div>
 </template>
@@ -71,20 +63,7 @@ export default {
 
     generateCertifications() {
       if (!this.selected.length) {
-        return;
-      }
-
-      if (this.selected.length == 1) {
-        this.$axios
-          .post('certifications', {
-            courseId: this.selected[0].courseId,
-            studentId: this.selected[0].studentId,
-            teacherName: this.selected[0].teacherName,
-          })
-          .then(() => {
-            return;
-          })
-
+        return
       }
 
       this.$axios
@@ -92,7 +71,24 @@ export default {
           certificationsList: this.selected,
         })
         .then((response) => {
-          console.log(response)
+          if (response.data.status === 304) {
+           return Swal.fire({
+              position: 'center',
+              type: 'error',
+              title: response.data.message,
+              showConfirmButton: false,
+              timer: 3000,
+            })
+          }
+
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: response.data.message,
+            text: 'Obs: Ignored duplicated values',
+            showConfirmButton: false,
+            timer: 5000,
+          })
         })
     },
 

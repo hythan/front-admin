@@ -24,19 +24,75 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-         <nuxt-link :to="{ path: `/classes/${item.id}/certifications` }">
-          <v-icon small class="mr-2" > mdi-account-school </v-icon>
+        <nuxt-link :to="{ path: `/classes/${item.id}/certifications` }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon color="blue" small class="mr-2" v-bind="attrs" v-on="on">
+                mdi-account-school
+              </v-icon>
+            </template>
+            <span>Certifications</span>
+          </v-tooltip>
         </nuxt-link>
+
         <nuxt-link :to="{ path: `/classes/${item.id}/registrations` }">
-          <v-icon small class="mr-2" > mdi-account-plus </v-icon>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon color="green" small class="mr-2" v-bind="attrs" v-on="on">
+                mdi-account-plus
+              </v-icon>
+            </template>
+            <span>Registrations</span>
+          </v-tooltip>
         </nuxt-link>
+
         <nuxt-link :to="{ path: `/classes/${item.id}` }">
-          <v-icon small class="mr-2"> mdi-eye </v-icon>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="light-blue"
+                small
+                class="mr-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-eye
+              </v-icon>
+            </template>
+            <span>Class Info</span>
+          </v-tooltip>
         </nuxt-link>
+
         <nuxt-link :to="{ path: `/classes/${item.id}/edit` }">
-          <v-icon small class="mr-2"> mdi-pencil </v-icon>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="#f2e600"
+                small
+                class="mr-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <span>Edit Class</span>
+          </v-tooltip>
         </nuxt-link>
-        <v-icon small @click="deleteClass(item.id)"> mdi-delete </v-icon>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="red"
+              small
+              @click="deleteClass(item.id)"
+              v-bind="attrs"
+              v-on="on"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>Delete Class</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </div>
