@@ -25,6 +25,23 @@
           class="mx-4"
         ></v-text-field>
       </template>
+        <template v-slot:[`item.actions`]="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              :color="checkCertification(item.studentId)? 'green': 'gray'"
+              small
+              @click="viewCertification(item.studentId)"
+              v-bind="attrs"
+              v-on="on"
+              :disabled="!checkCertification(item.studentId)"
+            >
+              mdi-school
+            </v-icon>
+          </template>
+          <span>Student Certification</span>
+        </v-tooltip>
+        </template>
     </v-data-table>
   </div>
 </template>
@@ -40,6 +57,7 @@ export default {
       students: [],
       studentsIds: [],
       selected: [],
+      studentsCertifications: [],
     }
   },
   computed: {
@@ -52,6 +70,9 @@ export default {
     },
   },
   methods: {
+    checkCertification (id){
+      return this.studentsIds.includes(id);
+    },
     filterOnlyCapsText(value, search, item) {
       return (
         value != null &&
@@ -72,7 +93,7 @@ export default {
         })
         .then((response) => {
           if (response.data.status === 304) {
-           return Swal.fire({
+            return Swal.fire({
               position: 'center',
               type: 'error',
               title: response.data.message,
@@ -92,8 +113,23 @@ export default {
         })
     },
 
+    getStudentsCertifications() {
+      let studens_ids = this.students.map((student) => student.id);
+      this.$axios
+        .get('certifications', {
+          params: {
+            course_id: this.students[0].courseId,
+            studens_ids:  JSON.parse(JSON.stringify(studens_ids))
+          },
+        })
+        .then((response) => {
+          this.studentsIds = response.data.map((cetification) => cetification.studentId);
+          this.studentsCertifications = response.data;
+        })
+    },
+
     async getOrUpdateRegistrationsList() {
-      await this.$axios
+      this.$axios
         .get(`classes/${this.$route.params.id}`, {
           headers: {
             Authorization: `${this.$auth.$storage._state['_token.local']}`,
@@ -104,6 +140,7 @@ export default {
           this.students = []
           this.setStudentsListData(response.data.registrations)
         })
+        .finally(() => this.getStudentsCertifications())
     },
 
     setStudentsListData(registrations) {
@@ -118,6 +155,11 @@ export default {
         this.students.push(studentObjAux)
       })
     },
+
+    viewCertification(id) {
+      const certification = this.studentsCertifications.filter(certification => certification.studentId == id);
+      this.$router.push(this.$route.path + `/${certification[0].id}`)
+    }
   },
   beforeMount() {
     if (!this.$auth.$storage._state['_token.local']) {

@@ -135,6 +135,7 @@ export default {
     },
 
     setRegistrationsListData(registrations) {
+      this.studentsIds = []
       registrations.forEach((element) => {
         let registrationObjectAux = {
           id: '',
@@ -147,7 +148,6 @@ export default {
           ? 'Complete'
           : 'Incomplete'
         this.registrations.push(registrationObjectAux)
-        this.studentsIds = []
         this.studentsIds.push(element.student.id)
       })
     },

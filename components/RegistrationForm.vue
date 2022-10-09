@@ -8,7 +8,7 @@
         <form @submit.prevent="submit">
           <v-card>
             <v-card-text>
-              <v-card-title> Dialog 2 </v-card-title>
+              <v-card-title> Add Student Registration </v-card-title>
 
               <validation-provider
                 v-slot="validationContext"
