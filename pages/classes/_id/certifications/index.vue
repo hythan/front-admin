@@ -158,7 +158,6 @@ export default {
 
     viewCertification(id) {
       const certification = this.studentsCertifications.filter(certification => certification.studentId == id);
-      this.$router.push(this.$route.path + `/${certification[0].id}`)
     }
   },
   beforeMount() {
