@@ -24,10 +24,38 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <nuxt-link :to="{ path: `/admins/${item.id}/edit` }"
-          ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
-        >
-        <v-icon small @click="deleteAdmin(item.id)"> mdi-delete </v-icon>
+        <nuxt-link :to="{ path: `/admins/${item.id}/edit` }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="#f2e600"
+                small
+                class="mr-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <span>Edit Admin</span>
+          </v-tooltip>
+        </nuxt-link>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="red"
+              small
+              class="mr-2"
+              v-bind="attrs"
+              v-on="on"
+              @click="deleteAdmin(item.id)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>Remove Admin</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </div>
@@ -81,20 +109,20 @@ export default {
         }
         this.$axios.delete(`admins/${id}`).then((response) => {
           Swal.fire('Admin was removed!', '', 'success')
-          this.getOrUpdateAdminsList();
+          this.getOrUpdateAdminsList()
         })
       })
     },
     getOrUpdateAdminsList() {
-        this.$axios
-      .get('admins', {
-        headers: {
-          Authorization: `${this.$auth.$storage._state['_token.local']}`,
-        },
-      })
-      .then((response) => {
-        this.admins = response.data
-      })
+      this.$axios
+        .get('admins', {
+          headers: {
+            Authorization: `${this.$auth.$storage._state['_token.local']}`,
+          },
+        })
+        .then((response) => {
+          this.admins = response.data
+        })
     },
   },
   mounted() {
@@ -102,7 +130,7 @@ export default {
       return
     }
 
-    this.getOrUpdateAdminsList();
+    this.getOrUpdateAdminsList()
   },
 }
 </script>

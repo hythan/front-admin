@@ -24,13 +24,47 @@
         ></v-text-field>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-         <nuxt-link :to="{ path: `/courses/${item.id}` }"
-          ><v-icon small class="mr-2"> mdi-eye </v-icon></nuxt-link
-        >
-        <nuxt-link :to="{ path: `/courses/${item.id}/edit` }"
-          ><v-icon small class="mr-2"> mdi-pencil </v-icon></nuxt-link
-        >
-        <v-icon small @click="deleteCourse(item.id)"> mdi-delete </v-icon>
+        <nuxt-link :to="{ path: `/courses/${item.id}` }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon color="blue" small class="mr-2" v-bind="attrs" v-on="on">
+                mdi-eye
+              </v-icon>
+            </template>
+            <span>Student Info</span>
+          </v-tooltip>
+        </nuxt-link>
+        <nuxt-link :to="{ path: `/courses/${item.id}/edit` }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="#f2e600"
+                small
+                class="mr-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <span>Edit Student</span>
+          </v-tooltip>
+        </nuxt-link>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="red"
+              small
+              class="mr-2"
+              v-bind="attrs"
+              v-on="on"
+              @click="deleteCourse(item.id)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>Remove Course</span>
+        </v-tooltip>
       </template>
     </v-data-table>
   </div>
@@ -49,7 +83,7 @@ export default {
   computed: {
     headers() {
       return [
-        { text: 'Name',value: 'name' },
+        { text: 'Name', value: 'name' },
         { text: 'Actions', value: 'actions' },
       ]
     },
