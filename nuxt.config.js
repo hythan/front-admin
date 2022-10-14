@@ -28,6 +28,7 @@ export default {
   plugins: [
     '~/plugins/vee-validate',
     '~/plugins/v-mask',
+    {src:'~/plugins/v-html-pdf', mode: 'client'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

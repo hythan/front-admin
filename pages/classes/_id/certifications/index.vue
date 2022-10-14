@@ -25,11 +25,11 @@
           class="mx-4"
         ></v-text-field>
       </template>
-        <template v-slot:[`item.actions`]="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              :color="checkCertification(item.studentId)? 'green': 'gray'"
+              :color="checkCertification(item.studentId) ? 'green' : 'gray'"
               small
               @click="viewCertification(item.studentId)"
               v-bind="attrs"
@@ -38,16 +38,20 @@
             >
               mdi-school
             </v-icon>
+            <StudentCertification
+              :certification="getCertification(item.studentId)"
+            />
           </template>
           <span>Student Certification</span>
         </v-tooltip>
-        </template>
+      </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
 import Swal from 'sweetalert2'
+import StudentCertification from '../../../../components/StudentCertification.vue'
 
 export default {
   data() {
@@ -58,6 +62,7 @@ export default {
       studentsIds: [],
       selected: [],
       studentsCertifications: [],
+      component: StudentCertification,
     }
   },
   computed: {
@@ -70,8 +75,8 @@ export default {
     },
   },
   methods: {
-    checkCertification (id){
-      return this.studentsIds.includes(id);
+    checkCertification(id) {
+      return this.studentsIds.includes(id)
     },
     filterOnlyCapsText(value, search, item) {
       return (
@@ -114,17 +119,19 @@ export default {
     },
 
     getStudentsCertifications() {
-      let studens_ids = this.students.map((student) => student.id);
+      let studens_ids = this.students.map((student) => student.id)
       this.$axios
         .get('certifications', {
           params: {
             course_id: this.students[0].courseId,
-            studens_ids:  JSON.parse(JSON.stringify(studens_ids))
+            studens_ids: JSON.parse(JSON.stringify(studens_ids)),
           },
         })
         .then((response) => {
-          this.studentsIds = response.data.map((cetification) => cetification.studentId);
-          this.studentsCertifications = response.data;
+          this.studentsIds = response.data.map(
+            (cetification) => cetification.studentId
+          )
+          this.studentsCertifications = response.data
         })
     },
 
@@ -156,9 +163,18 @@ export default {
       })
     },
 
+    getCertification(id) {
+      const certification = this.studentsCertifications.filter(
+        (certification) => certification.studentId == id
+      )
+
+      return certification[0] ? certification[0] : null;
+    },
+
     viewCertification(id) {
-      const certification = this.studentsCertifications.filter(certification => certification.studentId == id);
-    }
+      const certification = this.getCertification(id)
+      this.$nuxt.$emit('generateCertification', certification.id);
+    },
   },
   beforeMount() {
     if (!this.$auth.$storage._state['_token.local']) {
