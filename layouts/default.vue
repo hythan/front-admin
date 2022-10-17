@@ -117,6 +117,7 @@ export default {
   methods: {
     async handleLogout() {
       await this.$auth.logout();
+      this.$router.go(0)
     }
   }
 }
