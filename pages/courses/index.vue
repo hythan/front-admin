@@ -31,7 +31,7 @@
                 mdi-eye
               </v-icon>
             </template>
-            <span>Student Info</span>
+            <span>Course Info</span>
           </v-tooltip>
         </nuxt-link>
         <nuxt-link :to="{ path: `/courses/${item.id}/edit` }">
