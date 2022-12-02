@@ -47,7 +47,7 @@
                 mdi-pencil
               </v-icon>
             </template>
-            <span>Edit Teacher</span>
+            <span>Edit Student</span>
         </v-tooltip>
         </nuxt-link>
          <v-tooltip bottom>
@@ -63,7 +63,7 @@
               mdi-delete
             </v-icon>
           </template>
-          <span>Remove Course</span>
+          <span>Remove Student</span>
         </v-tooltip>
       </template>
     </v-data-table>

@@ -115,6 +115,7 @@ export default {
             showConfirmButton: false,
             timer: 5000,
           })
+          this.getOrUpdateRegistrationsList();
         })
     },
 

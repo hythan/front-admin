@@ -1,14 +1,14 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="12" sm="8" md="6" class="wellcome">
       <v-card class="logo py-4 d-flex justify-center">
-        <VuetifyLogo />
+        <img class="logo-img" src="~/assets/imgs/maxi-logo.png" />
       </v-card>
       <v-card>
         <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
+          Welcome to the Maxiambiental Admin's System
         </v-card-title>
-        <v-card-text>
+        <!-- <v-card-text>
           <p>
             Vuetify is a progressive Material Design component framework for
             Vue.js. It was designed to empower developers to create amazing
@@ -69,7 +69,7 @@
           >
             Nuxt GitHub
           </a>
-        </v-card-text>
+        </v-card-text> -->
       </v-card>
     </v-col>
   </v-row>
@@ -80,3 +80,9 @@ export default {
   name: 'IndexPage',
 }
 </script>
+<style scoped>
+.logo-img {
+  height: 300px;
+  width: 300px;
+}
+</style>
