@@ -9,7 +9,10 @@
     "generate": "nuxt generate",
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:prettier",
-    "lintfix": "prettier --write --list-different ."
+    "lintfix": "prettier --write --list-different .",
+    "install:dependencies": "docker-compose run app npm install",
+    "docker:start": "docker-compose up -d",
+    "docker:start:dev": "docker-compose up"
   },
   "dependencies": {
     "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
