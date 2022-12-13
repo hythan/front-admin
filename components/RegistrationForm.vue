@@ -60,8 +60,8 @@ export default {
       }
       this.$axios
         .post('registrations', {
-          studentId: this.studentId,
-          classId: this.$route.params.id,
+          studentId: Number(this.studentId),
+          classId: Number(this.$route.params.id),
         })
         .then(() => {
           this.dialog = false
